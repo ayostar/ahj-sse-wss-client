@@ -1,5 +1,5 @@
-import LoginWidget from './LoginWidget';
-import ChatWidget from './ChatWidget';
+import LoginWidget from './widgets/LoginWidget';
+import ChatWidget from './widgets/ChatWidget';
 
 export default class PageController {
   constructor(api, chat) {
