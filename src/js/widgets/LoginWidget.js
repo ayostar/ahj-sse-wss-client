@@ -10,18 +10,9 @@ export default class LoginWidget {
 
   init() {
     this.widget.classList.add('widget', 'login-widget', 'hidden');
-    this.widget.innerHTML = '<div class="login-control">\n'
-      + '                     <h3 class="login-title">Выберите псевдоним</h3>\n'
-      + '                     <form class="login-form">\n'
-      + '                       <input type="text" class="input input-nickname" required>\n'
-      + '                       <div class="error-container">\n'
-      + '                         <span class="error-text"></span>\n'
-      + '                       </div>\n'
-      + '                       <div class="btn-box">\n'
-      + '                         <button class="continue-btn">Продолжить</button>\n'
-      + '                       </div>\n'
-      + '                     </form>\n'
-      + '                   </div>\n';
+    this.widget.innerHTML = `<div class="login-control">\n <h3 class="login-title">Выберите псевдоним</h3>\n <form class="login-form">\n
+    <input type="text" class="input input-nickname" required>\n<div class="error-container">\n<span class="error-text"></span>\n</div>\n
+    <div class="btn-box">\n<button class="continue-btn">Продолжить</button>\n</div>\n</form>\n</div>\n`;
 
     this.loginWidgetContainer.append(this.widget);
     this.loginform = this.widget.querySelector('.login-form');

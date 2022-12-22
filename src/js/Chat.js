@@ -4,8 +4,10 @@ export default class Chat {
     this.activeId = null;
     this.name = null;
     this.active = null;
-    this.ws = new WebSocket('ws://ahj-sse-wss-server.onrender.com//ws');
+    // this.ws = new WebSocket('ws://ahj-sse-wss-server.onrender.com//ws');
+    this.ws = new WebSocket('ws://localhost:7070//ws');
     this.idVasserman = null;
+    this.idDruz = null;
   }
 
   start(contacts) {
@@ -64,12 +66,14 @@ export default class Chat {
     this.clearMessages();
 
     Array.from(contacts).forEach((item) => {
-      const {
-        id, name, active, status,
-      } = item;
+      const { id, name, active, status } = item;
 
       if (name === 'Vasserman') {
         this.idVasserman = id;
+      }
+
+      if (name === 'Druz') {
+        this.idDruz = id;
       }
 
       let checked;
@@ -96,8 +100,9 @@ export default class Chat {
         nickName = this.name;
       }
 
-      userEl.innerHTML = `<div class="login-status ${checked}"></div>`
-        + `                        <div class="login">${nickName}</div>`;
+      userEl.innerHTML =
+        `<div class="login-status ${checked}"></div>` +
+        `                        <div class="login">${nickName}</div>`;
       this.userList.append(userEl);
       const msglength = item.msg.length;
 
@@ -116,7 +121,7 @@ export default class Chat {
 
       if (this.active === true || this.active === 'true') {
         messageActive = 'message-you';
-        activeUser = 'Вы';
+        activeUser = 'You';
       } else {
         messageActive = 'message-client';
         activeUser = this.name;
@@ -126,8 +131,7 @@ export default class Chat {
       messageEl.dataset.userId = userId;
       messageEl.id = Date.parse(created);
       messageEl.classList.add('message', `${messageActive}`);
-      messageEl.innerHTML = `<div class="message-time">${activeUser}, ${formated}</div>`
-        + `                 <div class="message-text">${message}</div>`;
+      messageEl.innerHTML = `<div class="message-time">${activeUser}, ${formated}</div><div class="message-text">${message}</div>`;
 
       this.chatArea.append(messageEl);
       messageEl.scrollIntoView(false);
@@ -225,9 +229,18 @@ export default class Chat {
     if (!activeidVasserman) {
       return;
     }
-    const delay = Math.floor(Math.random() * (botText.length * 200));
+    const activeidDruz = Array.from(
+      this.userList.querySelectorAll('.user-container'),
+    ).find((item) => item.dataset.id === this.idDruz);
+    if (!activeidDruz) {
+      return;
+    }
+    const delay = Math.floor(Math.random() * (botText.length * 20));
     setTimeout(() => {
       this.createMessege(botText, this.idVasserman);
     }, delay);
+    setTimeout(() => {
+      this.createMessege('Я самый умный', this.idDruz);
+    }, 3000);
   }
 }
