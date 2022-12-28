@@ -4,8 +4,8 @@ export default class Chat {
     this.activeId = null;
     this.name = null;
     this.active = null;
-    // this.ws = new WebSocket('ws://ahj-sse-wss-server.onrender.com//ws');
-    this.ws = new WebSocket('ws://localhost:7070//ws');
+    this.ws = new WebSocket('ws://ahj-sse-wss-server.onrender.com//ws');
+    // this.ws = new WebSocket('ws://localhost:7070//ws');
     this.idVasserman = null;
     this.idDruz = null;
   }
