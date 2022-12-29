@@ -4,7 +4,7 @@ export default class Chat {
     this.activeId = null;
     this.name = null;
     this.active = null;
-    this.ws = new WebSocket('ws://ahj-sse-wss-server.onrender.com//ws');
+    this.ws = new WebSocket('wss://ahj-sse-wss-server.onrender.com//ws');
     // this.ws = new WebSocket('ws://localhost:7070//ws');
     this.idVasserman = null;
     this.idDruz = null;
@@ -66,9 +66,7 @@ export default class Chat {
     this.clearMessages();
 
     Array.from(contacts).forEach((item) => {
-      const {
-        id, name, active, status,
-      } = item;
+      const { id, name, active, status } = item;
 
       if (name === 'Vasserman') {
         this.idVasserman = id;
@@ -102,8 +100,9 @@ export default class Chat {
         nickName = this.name;
       }
 
-      userEl.innerHTML = `<div class="login-status ${checked}"></div>`
-        + `                        <div class="login">${nickName}</div>`;
+      userEl.innerHTML =
+        `<div class="login-status ${checked}"></div>` +
+        `                        <div class="login">${nickName}</div>`;
       this.userList.append(userEl);
       const msglength = item.msg.length;
 
