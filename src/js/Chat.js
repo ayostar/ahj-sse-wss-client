@@ -66,7 +66,9 @@ export default class Chat {
     this.clearMessages();
 
     Array.from(contacts).forEach((item) => {
-      const { id, name, active, status } = item;
+      const {
+        id, name, active, status,
+      } = item;
 
       if (name === 'Vasserman') {
         this.idVasserman = id;
@@ -100,9 +102,8 @@ export default class Chat {
         nickName = this.name;
       }
 
-      userEl.innerHTML =
-        `<div class="login-status ${checked}"></div>` +
-        `                        <div class="login">${nickName}</div>`;
+      userEl.innerHTML = `<div class="login-status ${checked}"></div>`
+        + `                        <div class="login">${nickName}</div>`;
       this.userList.append(userEl);
       const msglength = item.msg.length;
 
