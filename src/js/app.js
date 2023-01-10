@@ -1,10 +1,115 @@
-import API from './Rest';
-import Chat from './Chat';
-import PageController from './PageController';
+import User from './components/User';
+import Message from './components/Message';
 
-const api = new API('https://ahj-sse-wss-server.onrender.com/contacts');
-// const api = new API('http://localhost:7070/contacts');
-const chat = new Chat(document.querySelector('.container'));
-const pageCtrl = new PageController(api, chat);
-pageCtrl.bindToDOM(document.querySelector('.container'));
-pageCtrl.init();
+window.onload = () => {
+  // const ws = new WebSocket('ws://localhost:7070');
+
+  const ws = new WebSocket('wss://test-server-mbcd.onrender.com//ws');
+  const chooseUsernamePopup = document.querySelector('.choose-username-popup');
+  const chooseUsernameForm = document.querySelector('.choose-username-form');
+  const chatForm = document.getElementById('chat-form');
+  const popupOverlay = document.querySelector('.alarm-popup');
+  const popup = document.querySelector('.alarm-popup__container');
+  const close = document.querySelector('.alarm-popup__close');
+
+  const chat = document.querySelector('.chat');
+  const users = chat.querySelector('.chat__users');
+  const messages = chat.querySelector('.chat__messages');
+
+  ws.onmessage = (message) => {
+    // включена постоянная прослушка сеанса вебсокет
+    const data = JSON.parse(message.data);
+    console.log(message);
+    console.log(data);
+
+    if (data.renderUsers) {
+      // можно добавить на проверку массива пользователей
+      data.names.forEach((name) => {
+        users.appendChild(new User(name).render()); // если есть пользователи в текущем массиве, они выводятся, либо retrn ничего
+        return;
+      });
+    }
+
+    if (data.nameIsFree) {
+      // если имя не занято убирается окно логина и открывается чат
+      chooseUsernamePopup.classList.add('hidden');
+      chat.classList.remove('hidden');
+      const user = new User(data.name).render();
+      user.classList.add('current-user');
+      users.appendChild(user);
+      return;
+    } else if (data.nameIsFree === false) {
+      // если имя занято, то всплывает предупреждение
+      popupOverlay.classList.remove('hidden');
+      console.log('Имя занято. Выберите другое имя.');
+    }
+
+    if (data.renderNames) {
+      users.appendChild(new User(data.name).render());
+      return;
+    }
+
+    if (data.closeUser) {
+      const users = [...document.querySelectorAll('.user')];
+      users.forEach((user) => {
+        if (user.querySelector('.user__name').textContent === data.name) {
+          user.remove();
+          return;
+        }
+      });
+    }
+
+    if (data.renderOwnMessage) {
+      const ownMessage = new Message(
+        data.name,
+        data.message,
+        data.date
+      ).render();
+      ownMessage.classList.add('own-message');
+      messages.appendChild(ownMessage);
+    }
+
+    if (data.renderMessage) {
+      messages.appendChild(
+        new Message(data.name, data.message, data.date).render()
+      );
+    }
+
+    if (data.renderMessages) {
+      data.messages.forEach((mes) => {
+        messages.appendChild(
+          new Message(mes.name, mes.message, mes.date).render()
+        );
+      });
+    }
+  };
+
+  chooseUsernameForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    const username = document.getElementById('username').value;
+    ws.send(JSON.stringify({ username: username, chooseUsername: true })); // отправляем на сервер введенное имя пользователя
+    evt.currentTarget.reset();
+  });
+
+  chatForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    const messageText = document.getElementById('message').value;
+    ws.send(
+      JSON.stringify({
+        chatMessage: true,
+        messageText: messageText,
+      })
+    );
+    evt.currentTarget.reset();
+  });
+
+  popupOverlay.addEventListener('click', function (event) {
+    if (event.target !== popup && !popup.contains(event.target)) {
+      popupOverlay.classList.add('hidden');
+    }
+  });
+
+  close.addEventListener('click', function (event) {
+    popupOverlay.classList.add('hidden');
+  });
+};

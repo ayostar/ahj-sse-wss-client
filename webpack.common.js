@@ -18,7 +18,7 @@ module.exports = {
         },
       },
       {
-        test: /\.html$/,
+        test: /\.html$/i,
         use: [
           {
             loader: 'html-loader',
@@ -26,11 +26,11 @@ module.exports = {
         ],
       },
       {
-        test: /\.css$/,
-        use: [MiniCssExtractPlugin.loader, 'css-loader'],
+        test: /\.(s*)css$/i,
+        use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
       },
       {
-        test: /\.(jpg|png|svg|jpeg|gif|woff|woff2|eot|ttf|otf)$/,
+        test: /\.(png|svg|jpg|jpeg|gif)$/i,
         type: 'asset/resource',
       },
     ],
