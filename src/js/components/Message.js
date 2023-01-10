@@ -21,23 +21,19 @@ export default class Message {
   }
 
   formatDate() {
-    const day =
-      this.date.getDate() < 10
-        ? `0${this.date.getDate()}`
-        : this.date.getDate();
-    const month =
-      this.date.getMonth() < 10
-        ? `0${this.date.getMonth()}`
-        : this.date.getMonth();
+    const day = this.date.getDate() < 10
+      ? `0${this.date.getDate()}`
+      : this.date.getDate();
+    const month = this.date.getMonth() < 10
+      ? `0${this.date.getMonth()}`
+      : this.date.getMonth();
     const year = String(this.date.getFullYear()).slice(-2);
-    const hour =
-      this.date.getHours() < 10
-        ? `0${this.date.getHours()}`
-        : this.date.getHours();
-    const minute =
-      this.date.getMinutes() < 10
-        ? `0${this.date.getMinutes()}`
-        : this.date.getMinutes();
+    const hour = this.date.getHours() < 10
+      ? `0${this.date.getHours()}`
+      : this.date.getHours();
+    const minute = this.date.getMinutes() < 10
+      ? `0${this.date.getMinutes()}`
+      : this.date.getMinutes();
     const formattedDate = `${hour}:${minute} ${day}.${month}.${year}`;
 
     return formattedDate;

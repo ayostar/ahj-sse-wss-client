@@ -25,8 +25,9 @@ window.onload = () => {
     if (data.renderUsers) {
       // можно добавить на проверку массива пользователей
       data.names.forEach((name) => {
-        users.appendChild(new User(name).render()); // если есть пользователи в текущем массиве, они выводятся, либо retrn ничего
-        return;
+        // если есть пользователи в текущем массиве, они выводятся, либо retrn ничего
+        users.appendChild(new User(name).render());
+        // return;
       });
     }
 
@@ -37,7 +38,7 @@ window.onload = () => {
       const user = new User(data.name).render();
       user.classList.add('current-user');
       users.appendChild(user);
-      return;
+      //   return;
     } else if (data.nameIsFree === false) {
       // если имя занято, то всплывает предупреждение
       popupOverlay.classList.remove('hidden');
@@ -50,11 +51,11 @@ window.onload = () => {
     }
 
     if (data.closeUser) {
-      const users = [...document.querySelectorAll('.user')];
-      users.forEach((user) => {
+      const usersArray = [...document.querySelectorAll('.user')];
+      usersArray.forEach((user) => {
         if (user.querySelector('.user__name').textContent === data.name) {
           user.remove();
-          return;
+          //   return;
         }
       });
     }
@@ -63,7 +64,7 @@ window.onload = () => {
       const ownMessage = new Message(
         data.name,
         data.message,
-        data.date
+        data.date,
       ).render();
       ownMessage.classList.add('own-message');
       messages.appendChild(ownMessage);
@@ -71,14 +72,14 @@ window.onload = () => {
 
     if (data.renderMessage) {
       messages.appendChild(
-        new Message(data.name, data.message, data.date).render()
+        new Message(data.name, data.message, data.date).render(),
       );
     }
 
     if (data.renderMessages) {
       data.messages.forEach((mes) => {
         messages.appendChild(
-          new Message(mes.name, mes.message, mes.date).render()
+          new Message(mes.name, mes.message, mes.date).render(),
         );
       });
     }
@@ -87,7 +88,8 @@ window.onload = () => {
   chooseUsernameForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
     const username = document.getElementById('username').value;
-    ws.send(JSON.stringify({ username: username, chooseUsername: true })); // отправляем на сервер введенное имя пользователя
+    // отправляем на сервер введенное имя пользователя
+    ws.send(JSON.stringify({ username, chooseUsername: true }));
     evt.currentTarget.reset();
   });
 
@@ -97,19 +99,20 @@ window.onload = () => {
     ws.send(
       JSON.stringify({
         chatMessage: true,
-        messageText: messageText,
-      })
+        messageText,
+      }),
     );
     evt.currentTarget.reset();
   });
 
-  popupOverlay.addEventListener('click', function (event) {
+  popupOverlay.addEventListener('click', (event) => {
     if (event.target !== popup && !popup.contains(event.target)) {
       popupOverlay.classList.add('hidden');
     }
   });
 
-  close.addEventListener('click', function (event) {
+  close.addEventListener('click', (event) => {
+    console.log(event);
     popupOverlay.classList.add('hidden');
   });
 };
