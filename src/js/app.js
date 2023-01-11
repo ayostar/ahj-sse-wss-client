@@ -3,8 +3,7 @@ import Message from './components/Message';
 
 window.onload = () => {
   // const ws = new WebSocket('ws://localhost:7070');
-
-  const ws = new WebSocket('wss://test-server-mbcd.onrender.com//ws');
+  const ws = new WebSocket('wss://ahj-sse-wss-server.onrender.com//ws');
   const chooseUsernamePopup = document.querySelector('.choose-username-popup');
   const chooseUsernameForm = document.querySelector('.choose-username-form');
   const chatForm = document.getElementById('chat-form');
@@ -17,30 +16,26 @@ window.onload = () => {
   const messages = chat.querySelector('.chat__messages');
 
   ws.onmessage = (message) => {
-    // включена постоянная прослушка сеанса вебсокет
     const data = JSON.parse(message.data);
     console.log(message);
     console.log(data);
 
     if (data.renderUsers) {
-      // можно добавить на проверку массива пользователей
       data.names.forEach((name) => {
-        // если есть пользователи в текущем массиве, они выводятся, либо retrn ничего
         users.appendChild(new User(name).render());
-        // return;
       });
     }
 
     if (data.nameIsFree) {
-      // если имя не занято убирается окно логина и открывается чат
       chooseUsernamePopup.classList.add('hidden');
       chat.classList.remove('hidden');
       const user = new User(data.name).render();
       user.classList.add('current-user');
       users.appendChild(user);
-      //   return;
+      document.querySelector(
+        '.current-user',
+      ).childNodes[1].textContent = `${user.textContent} <-- You`;
     } else if (data.nameIsFree === false) {
-      // если имя занято, то всплывает предупреждение
       popupOverlay.classList.remove('hidden');
       console.log('Имя занято. Выберите другое имя.');
     }
@@ -55,7 +50,6 @@ window.onload = () => {
       usersArray.forEach((user) => {
         if (user.querySelector('.user__name').textContent === data.name) {
           user.remove();
-          //   return;
         }
       });
     }
@@ -88,7 +82,6 @@ window.onload = () => {
   chooseUsernameForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
     const username = document.getElementById('username').value;
-    // отправляем на сервер введенное имя пользователя
     ws.send(JSON.stringify({ username, chooseUsername: true }));
     evt.currentTarget.reset();
   });

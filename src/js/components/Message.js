@@ -25,7 +25,7 @@ export default class Message {
       ? `0${this.date.getDate()}`
       : this.date.getDate();
     const month = this.date.getMonth() < 10
-      ? `0${this.date.getMonth()}`
+      ? `0${this.date.getMonth() + 1}`
       : this.date.getMonth();
     const year = String(this.date.getFullYear()).slice(-2);
     const hour = this.date.getHours() < 10
